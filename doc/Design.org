@@ -1,0 +1,32 @@
+#+TITLE: Design
+#+AUTHOR: Yang, Ying-chao
+#+EMAIL:      yangyingchao[at]gmail[dot]com
+#+OPTIONS: ^:nil toc:1
+#+KEYWORDS: (nil)
+#+CATEGORIES: (nil)
+#+DESCRIPTION: (nil)
+#+OPTIONS:    H:3 \n:nil ::t |:t ^:{} -:t f:t *:t tex:t d:(HIDE) tags:not-in-toc
+#+STARTUP:    align fold nodlcheck hidestars oddeven lognotestate hideblocks
+#+SEQ_TODO:   TODO(t) INPROGRESS(i) WAITING(w@) | DONE(d) CANCELED(c@)
+#+TAGS:       Write(w) Update(u) Fix(f) Check(c) noexport(n)
+#+LANGUAGE:   en
+#+HTML_HEAD:      <style type="text/css">#outline-container-introduction{ clear:both; }</style>
+#+LINK_UP:    http://yangyingchao.github.io
+#+LINK_HOME:  http://yangyingchao.github.io
+#+EXCLUDE_TAGS: noexport
+
+Dictionary on OSX is really convenient to use: select some words, right click
+and select "look up", then background of selected words becomes yellow, it
+start to look up definition for selected word, and when there are results
+available, results will be displayed on a popup window.
+
+So here is a list of required "things", needs to find out how to implement
+using gjs.
+
+ - [ ] Detect right-click events on all apps running in gnome ?
+ - [ ] Get selected words in all apps running in gnome ?
+ - [ ] Find a widget to render html.
+ - [ ] Retrive content from an URL.
+
+ After writing above words, I think it better starts with creating a
+ chrome-extension fist, found one: google-dictionary...
