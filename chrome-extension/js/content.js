@@ -15,6 +15,12 @@ function getLinks() {
   return results;
 };
 
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-  sendResponse(getLinks());
-});
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    console.log(sender.tab ?
+                "B: from a content script:" + sender.tab.url :
+                "B: from the extension");
+    document.body.style.backgroundColor="red";
+    // if (request.greeting == "hello")
+    sendResponse({farewell: "goodbye"});
+  });
