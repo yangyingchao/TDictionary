@@ -9,7 +9,7 @@ var youdaoDictionary = {
   baseUrl : "http://dict.youdao.com/search?q=",
   suffix : "&keyfrom=dict.typo&spc=dictionary&le=eng",
 
-// TODO: provide a callback to notify when definition is available
+  // TODO: provide a callback to notify when definition is available
   lookup : function(key) {
     var req = new XMLHttpRequest();
     req.open("GET", this.baseUrl + key + this.suffix, true);
@@ -41,24 +41,39 @@ var youdaoDictionary = {
     //      });
     //    });
 
-    chrome.runtime.sendMessage({content: answer});
+    chrome.tabs.query({active: true, currentWindow: true},
+                      function(tabs){
+                        chrome.tabs.sendMessage(tabs[0].id, {action: "open_dialog_box"}, function(response) {});
+                      });
+
+    chrome.tabs.query({active: true, currentWindow: true},
+                      function(tabs) {
+                        chrome.tabs.sendMessage(tabs[0].id,
+                                                {greeting: "hello",
+                                                 content: answer},
+                                                function(response) {
+                                                  console.log(response);
+                                                });
+                      });
+    chrome.tabs.query({active: true},
+                      function(tabs){chrome.tabs.sendMessage(tabs.id,
+                                                             {action:
+                                                              "open_dialog_box"},
+                                                             function(response) { }); });
   }
 };
 
 
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    console.log(sender.tab ?
-                "A: from a content script:" + sender.tab.url :
-                "A: from the extension");
-    console.log(request.content);
-  })
-
-
-function setPassword(password) {
-    // Do something, eg..:
-    console.log(password);
-};
+// chrome.runtime.onMessage.addListener(
+//   function(request, sender, sendResponse) {
+//     console.log(sender.tab ?
+//                 "A: from a content script:" + sender.tab.url :
+//                 "A: from the extension");
+//     // console.log(request.content);
+//     chrome.tabs.executeScript({
+//       file: 'js/defination.js'
+//   });
+//   })
 
 
 // The onClicked callback function.
