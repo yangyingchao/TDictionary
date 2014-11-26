@@ -65,7 +65,10 @@ chrome.runtime.onMessage.addListener(
       var meaning = document.createElement('div');
       meaning.id = "tdict-bubble-meaning";
 
-      meaning.appendChild(document.createTextNode("AAAAAAAAAAAAAAAAA"));
+      // @todo: parse and find proper node. this should be a part of backend.
+      //        
+      var ele = $.parseHTML(request.userData).;
+      meaning.appendChild(document.createTextNode(request.userData));
 
       main.appendChild(meaning);
       root.appendChild(main);
