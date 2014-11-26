@@ -29,7 +29,8 @@
 
   "content_scripts": [
     {
-      "matches":["*://*/*", "http://*/*", "https://*/*", "file://*/*"],
+      "matches": ["<all_urls>"],
+      // "matches":["*://*/*", "http://*/*", "https://*/*", "file://*/*"],
       "css": ["css/mystyle.css"],
       "js": ["js/content.js"],
 	  "all_frames": true

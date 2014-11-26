@@ -1,14 +1,23 @@
-chrome.extension.onMessage.addListener(
-  function(msg, sender, sendResponse) {
-    alert("Message recieved!");
-});
+// chrome.runtime.sendMessage({action: "open_dialog_box"},
+//                           function(response) {});
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    alert("AAA");
-    console.log(sender.tab ?
-                "from a content script:" + sender.tab.url :
-                "from the extension");
+    console.log(JSON.stringify(request));
+    if (request.status == "begin") {
+      alert("Staring looking up...");
+    }
+    else if (request.status == "ok") {
+      debugger;
+      alert("Finished look up...");
+    }
+    else if (request.status == "error") {
+      alert("Failed to look up...");
+    }
+    else {
+      alert("Unknown..." + request.status);
+    }
+
     if (request.greeting == "hello")
       sendResponse({farewell: "goodbye"});
   });

@@ -1,4 +1,15 @@
-﻿// Base class for dictionary.
+﻿function notifyStatus(statusCode, data)
+{
+  chrome.tabs.query({active: true, currentWindow: true},
+                    function(tabs){
+                      chrome.tabs.sendMessage(tabs[0].id,
+                                              {status: statusCode,
+                                              userData: data},
+                                              function(response) {});
+                    });
+}
+
+// Base class for dictionary.
 // var Dictionary = new Class({
 //   initialize: function() {
 //   }
@@ -14,6 +25,7 @@ var youdaoDictionary = {
     var req = new XMLHttpRequest();
     req.open("GET", this.baseUrl + key + this.suffix, true);
     req.onload = this.getDefinations.bind(this);
+    notifyStatus("begin", 0);
     req.send(null);
   },
 
@@ -27,53 +39,21 @@ var youdaoDictionary = {
    * @private
    */
   getDefinations : function (e) {
-    var answer = e.target.response;
-    // chrome.tabs.create({
-    //   url: chrome.extension.getURL('html/defination.html'),
-    //   active: false
-    // }, function(tab) {
-    //      // After the tab has been created, open a window to inject the tab
-    //      chrome.windows.create({
-    //        tabId: tab.id,
-    //        type: 'popup',
-    //        focused: true
-    //        // incognito, top, left, ...
-    //      });
-    //    });
-
-    chrome.tabs.query({active: true, currentWindow: true},
-                      function(tabs){
-                        chrome.tabs.sendMessage(tabs[0].id, {action: "open_dialog_box"}, function(response) {});
-                      });
-
-    chrome.tabs.query({active: true, currentWindow: true},
-                      function(tabs) {
-                        chrome.tabs.sendMessage(tabs[0].id,
-                                                {greeting: "hello",
-                                                 content: answer},
-                                                function(response) {
-                                                  console.log(response);
-                                                });
-                      });
-    chrome.tabs.query({active: true},
-                      function(tabs){chrome.tabs.sendMessage(tabs.id,
-                                                             {action:
-                                                              "open_dialog_box"},
-                                                             function(response) { }); });
+    notifyStatus("ok", e.target.response);
   }
 };
 
 
-// chrome.runtime.onMessage.addListener(
-//   function(request, sender, sendResponse) {
-//     console.log(sender.tab ?
-//                 "A: from a content script:" + sender.tab.url :
-//                 "A: from the extension");
-//     // console.log(request.content);
-//     chrome.tabs.executeScript({
-//       file: 'js/defination.js'
-//   });
-//   })
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    debugger;
+    alert("AAA");
+    console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+    if (request.greeting == "hello")
+      sendResponse({farewell: "goodbye"});
+  });
 
 
 // The onClicked callback function.
