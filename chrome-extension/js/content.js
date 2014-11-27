@@ -6,75 +6,193 @@ function generateTag ()
 
 }
 
+function generate_css ()
+{
+  var css = '#tdict-bubble-main,#tdict-arrow-container {'+
+    '    background-color:#ffd;'+
+    '    z-index:99997'+
+    '}'+
+    ''+
+    '*{'+
+    '    box-sizing:border-box'+
+    '}'+
+    'a{'+
+    '    color:#11c;'+
+    '    text-decoration:none'+
+    '}'+
+    'a:hover{'+
+    '    text-decoration:underline'+
+    '}'+
+    '.display-none{'+
+    '    display:none!important'+
+    '}'+
+    '#tdict-bubble-main{'+
+    '    border:1px solid #999;'+
+    '    border-radius:4px;'+
+    '    box-shadow:0 0 20px rgba(0,0,0,0.5);'+
+    '    color:#222;'+
+    '    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;'+
+    '    font-size:14px;'+
+    '    line-height:normal;'+
+    '    padding:9px;'+
+    '    position:absolute;'+
+    '    width:300px'+
+    '}'+
+    '#tdict-bubble-main:after{'+
+    '    clear:both;'+
+    '    content:"";'+
+    '    display:table'+
+    '}'+
+    '#tdict-bubble-close{'+
+    '    position:absolute;'+
+    '    top:0;'+
+    '    right:0;'+
+    '    width:16px;'+
+    '    height:16px;'+
+    '    background-image:url("data:image/png;'+
+    'base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAYUlEQVQYV12PwQ2AMAwD2w3YBEaAycsIsAkbgC+qowikeyCfHLe31l5xiUM8gm8RQ2x9hmuRECIUNwL2KSwhRCh2BFda4j9CTlbBtQi5ySfy5mzMTXWka3FyEwLPzJv/TR8o8xvGTnBWXwAAAABJRU5ErkJggg==");'+
+    '    background-position:center;'+
+    '    background-repeat:no-repeat;'+
+    '    cursor:pointer;'+
+    '    opacity:0.35'+
+    '}'+
+    '#tdict-bubble-close:hover{'+
+    '    opacity:0.8'+
+    '}'+
+    '#tdict-bubble-query-row{'+
+    '    margin-bottom:9px'+
+    '}'+
+    '#tdict-bubble-query,#tdict-bubble-audio-icon{'+
+    '    display:inline-block;'+
+    '    height:20px;'+
+    '    line-height:20px;'+
+    '    vertical-align:top'+
+    '}'+
+    '#tdict-bubble-query{'+
+    '    font-size:16px;'+
+    '    font-weight:bold'+
+    '}'+
+    '#tdict-bubble-audio-icon{'+
+    '    background-image:url("data:image/png;'+
+    'base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAcUlEQVQ4y2P4//8/AyUYQhAH3gNxA7IAIQPmo/H3g/QA8XkgFiBkwHyoYnRQABVfj88AmGZcTuuHyjlgMwBZM7IE3NlQGhQe65EN+I8Dw8MLGgYoFpFqADK/YUAMwOsFigORatFIlYRElaRMWmaiBAMAp0n+3U0kqkAAAAAASUVORK5CYII=");'+
+    '    background-position:center;'+
+    '    background-repeat:no-repeat;'+
+    '    cursor:pointer;'+
+    '    margin-left:8px;'+
+    '    opacity:0.5;'+
+    '    width:16px'+
+    '}'+
+    '#tdict-bubble-audio-icon:hover{'+
+    '    opacity:1'+
+    '}'+
+    '#tdict-bubble-meaning{'+
+    '    line-height:1.3'+
+    '}'+
+    '#tdict-bubble-options-tip,#tdict-bubble-more,#tdict-bubble-attribution{'+
+    '    font-size:12px;'+
+    '    line-height:1.3;'+
+    '    margin-top:9px'+
+    '}'+
+    '#tdict-bubble-options-tip{'+
+    '    color:#c04'+
+    '}'+
+    '#tdict-bubble-more a{'+
+    '    float:right;'+
+    '    word-break:break-all'+
+    '}'+
+    '#tdict-bubble-attribution{'+
+    '    color:#666;'+
+    '    float:left;'+
+    '    margin-right:9px;'+
+    '    overflow:hidden;'+
+    '    text-overflow:ellipsis;'+
+    '    white-space:nowrap;'+
+    '    width:230px'+
+    '}'+
+    '#tdict-bubble-attribution a{'+
+    '    color:#073'+
+    '}'+
+    '#tdict-arrow-main{'+
+    '    position:absolute;'+
+    '    z-index:99998'+
+    '}'+
+    '#tdict-bubble-arrow-inner-up,#tdict-bubble-arrow-inner-down{'+
+    '    background:transparent;'+
+    '    border-left:10px solid transparent;'+
+    '    border-right:10px solid transparent;'+
+    '    left:2px;'+
+    '    position:absolute;'+
+    '    width:0;'+
+    '    z-index:99999'+
+    '}'+
+    '#tdict-bubble-arrow-inner-up{'+
+    '    border-bottom:10px solid #ffd;'+
+    '    top:2px'+
+    '}'+
+    '#tdict-bubble-arrow-inner-down{'+
+    '    border-top:10px solid #ffd'+
+    '}'+
+    '#tdict-bubble-arrow-outer-up,#tdict-bubble-arrow-outer-down{'+
+    '    background:transparent;'+
+    '    border-left:12px solid transparent;'+
+    '    border-right:12px solid transparent;'+
+    '    left:0;'+
+    '    position:absolute;'+
+    '    width:0'+
+    '}'+
+    '#tdict-bubble-arrow-outer-up{'+
+    '    border-bottom:12px solid #999'+
+    '}'+
+    '#tdict-bubble-arrow-outer-down{'+
+    '    border-top:12px solid #999'+
+    '}'+
+    '.nytd_selection_button{'+
+    '    display:none'+
+    '}';
+
+  return css;
+}
+
+var injected = null;
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.status == "begin") {
-      document.body.style.backgroundColor="green";
-      alert("Staring looking up...");
+
     }
     else if (request.status == "ok") {
       debugger;
-      document.body.style.backgroundColor="yellow";
-
-      var root = document.createElement('div');
-      root.id="tdict-root";
+      injected = document.createElement('div');
+      injected.id="tdict-root";
 
       var css = document.createElement('style');
       css.type= "text/css";
-      css.appendChild(document.createTextNode(
-        '#tdict-bubble-main{    border:1px solid #999;    border-radius:4px;    box-shadow:0 0 20px rgba(0,0,0,0.5);    color:#222;    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;    font-size:14px;    line-height:normal;    padding:9px;    position:absolute;    width:300px} '      ));
-      root.appendChild(css);
+      css.appendChild(document.createTextNode(generate_css()));
+      injected.appendChild(css);
 
-
-     //  a.a.style.left="0";
-     //     a.a.style.top="0";
-     //     var b=
-     //         a.a.offsetWidth,c=a.a.offsetHeight,f=[window.pageXOffset,window.pageYOffset],d=f[0],g=[a.k.left+d,a.k.top+f[1]],n=a.k.bottom-a.k.top,z=g[0]+(a.k.right-a.k.left)/2,f=d+document.documentElement.offsetWidth,l=z-b/2;
-     //     l+b>f&&(l=f-b);
-     //     l<d&&(l=d);
-     //     var r=g[1]-c-12+1,m=g[1]+n+12-1;
-     //     i:if(b=new D(r,l+b,r+c,l),b.top<window.pageYOffset)b=!1;
-     //     else
-     //     {
-     //         for(var c=document.getElementsByTagName("embed"),A=document.getElementsByTagName("object"),p=[window.pageXOffset,window.pageYOffset],B=p[0],p=p[1],q=0,K=c.length+A.length;
-     //             q<
-     //             K;
-     //             q++)
-     //         {
-     //             var h=(q<c.length?c[q]:A[q-c.length]).getBoundingClientRect(),h=new D(h.top+p,h.right+B,h.bottom+p,h.left+B);
-     //             if(b.bottom>h.top&&h.bottom>b.top&&b.left<h.right&&h.left<b.right)
-     //             {
-     //                 b=!1;
-     //                 break i
-     //             }
-
-     //         }
-     //         b=!0
-     //     }
-     //     b?(m=a.w,m.style.top=g[1]-12+"px"):(r=m,m=a.A,m.style.top=g[1]+n+"px");
-     //     g=z-12;
-     //     m.style.left=g+"px";
-     //     g-5>d&&g+24+5<f&&a.r.appendChild(m);
-     //     a.a.style.top=r+"px";
-     //     a.a.style.left=l+"px"
-     // }
       var main = document.createElement('div');
       main.id = "tdict-bubble-main";
+      //TODO: calculate position based on current selection.
       main.setAttribute("style", "left: 748px; top: 54.5625px;");
 
+      var close = document.createElement('div');
+      close.id="tdict-bubble-close";
+
+      // @todo: close injected window when clicked "X"..
+      main.appendChild(close);
       var meaning = document.createElement('div');
       meaning.id = "tdict-bubble-meaning";
 
       // @todo: parse and find proper node. this should be a part of backend.
-      //        
-      var ele = $.parseHTML(request.userData).;
-      meaning.appendChild(document.createTextNode(request.userData));
+      //
+      ele = $(request.userData).find("#phrsListTab")[0]
+      meaning.appendChild(// document.createTextNode(request.userData)
+        ele);
 
       main.appendChild(meaning);
-      root.appendChild(main);
+      injected.appendChild(main);
 
-      document.body.parentNode.appendChild(root);
-      alert("Finished look up...");
+      document.body.parentNode.appendChild(injected);
     }
     else if (request.status == "error") {
       document.body.style.backgroundColor="red";
