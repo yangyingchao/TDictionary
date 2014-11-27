@@ -36,7 +36,7 @@ function generate_css ()
     '    line-height:normal;'+
     '    padding:9px;'+
     '    position:absolute;'+
-    '    width:300px'+
+    '    width:500px'+
     '}'+
     '#tdict-bubble-main:after{'+
     '    clear:both;'+
@@ -148,17 +148,28 @@ function generate_css ()
     '}'+
     '.nytd_selection_button{'+
     '    display:none'+
-    '}';
+    '}' +
+    '.sp {background:url(http://shared.ydstatic.com/dict/v5.15/styles/new-sprite.png) no-repeat;vertical-align:middle;overflow:hidden;display:inline-block;z-index:99998}';
 
   return css;
 }
 
 var injected = null;
 
+function remove_injected_node ()
+{
+  if (injected){
+    injected.remove();
+  }
+
+}
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.status == "begin") {
-
+      if (injected != null){
+        injected.remove();
+      }
+      //@todo: show a spin...
     }
     else if (request.status == "ok") {
       debugger;
@@ -177,9 +188,9 @@ chrome.runtime.onMessage.addListener(
 
       var close = document.createElement('div');
       close.id="tdict-bubble-close";
-
       // @todo: close injected window when clicked "X"..
       main.appendChild(close);
+
       var meaning = document.createElement('div');
       meaning.id = "tdict-bubble-meaning";
 
@@ -193,6 +204,8 @@ chrome.runtime.onMessage.addListener(
       injected.appendChild(main);
 
       document.body.parentNode.appendChild(injected);
+      $(".img-list").remove();
+      $("#tdict-bubble-close").bind("click",remove_injected_node);
     }
     else if (request.status == "error") {
       document.body.style.backgroundColor="red";
