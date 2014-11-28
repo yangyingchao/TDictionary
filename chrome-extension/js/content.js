@@ -35,7 +35,7 @@ function generate_css ()
     '    font-size:14px;'+
     '    line-height:normal;'+
     '    padding:9px;'+
-    '    position:absolute;'+
+    '    position:fixed;'+
     '    width:500px'+
     '}'+
     '#tdict-bubble-main:after{'+
@@ -169,6 +169,8 @@ chrome.runtime.onMessage.addListener(
       if (injected != null){
         injected.remove();
       }
+      var sel = window.getSelection();
+      console.log(""+sel);
       //@todo: show a spin...
     }
     else if (request.status == "ok") {
