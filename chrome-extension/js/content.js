@@ -9,7 +9,7 @@ function generateTag ()
 function generate_css ()
 {
   var css = '#tdict-bubble-main,#tdict-arrow-container {'+
-    '    background-color:#ffd;'+
+    '    background-color:#ebebea;'+
     '    z-index:99997'+
     '}'+
     ''+
