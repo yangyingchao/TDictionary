@@ -159,7 +159,7 @@ function generate_css ()
     '.nytd_selection_button{'+
     '    display:none'+
     '}' +
-    '.pronounce {'+
+    '#copyright a {'+
     'font-size: 75%; color: #666;font-weight: lighter'+
     '}';
   return css;
@@ -271,6 +271,17 @@ chrome.runtime.onMessage.addListener(
       ele = $(request.userData).find(".trans-container")[0]
       target.appendChild(ele);
       $(".img-list").remove();
+
+      target.appendChild(document.createElement('br'));
+
+      var copyright=document.createElement('div');
+      copyright.id = 'copyright';
+      var ac = document.createElement('a');
+      ac.setAttribute('href', "http://www.youdao.com/");
+      ac.appendChild(document.createTextNode("有道词典"));
+      copyright.appendChild(ac);
+      target.appendChild(copyright);
+
       $("#tdict-replacement span").bind("click",function(){
         chrome.runtime.sendMessage({cmd: "speak",
                                     userData: key});
