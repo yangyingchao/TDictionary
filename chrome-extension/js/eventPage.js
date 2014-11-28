@@ -25,7 +25,7 @@ var youdaoDictionary = {
     var req = new XMLHttpRequest();
     req.open("GET", this.baseUrl + key + this.suffix, true);
     req.onload = this.getDefinations.bind(this);
-    notifyStatus("begin", 0);
+    notifyStatus("begin", "key");
     req.send(null);
   },
 

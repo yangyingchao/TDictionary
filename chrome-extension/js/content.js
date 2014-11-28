@@ -163,51 +163,97 @@ function remove_injected_node ()
   }
 
 }
+
+function inject_tdict ()
+{
+  if (injected != null){
+    injected.remove();
+  }
+  injected = document.createElement('div');
+  injected.id="tdict-root";
+
+  var css = document.createElement('style');
+  css.type= "text/css";
+  css.appendChild(document.createTextNode(generate_css()));
+  injected.appendChild(css);
+
+  var main = document.createElement('div');
+  main.id = "tdict-bubble-main";
+  //TODO: calculate position based on current selection.
+  main.setAttribute("style", "left: 748px; top: 54.5625px;");
+
+  var close = document.createElement('div');
+  close.id="tdict-bubble-close";
+  // @todo: close injected window when clicked "X"..
+  main.appendChild(close);
+
+  var meaning = document.createElement('div');
+  meaning.id = "tdict-bubble-meaning";
+
+  var replacement = document.createElement('div');
+  // this will be replaced with proper nodes based on conditions...
+  replacement.id = 'tdict-replacement';
+  meaning.appendChild(replacement);
+
+  main.appendChild(meaning);
+  injected.appendChild(main);
+
+  document.body.parentNode.appendChild(injected);
+  $(".img-list").remove();
+  $("#tdict-bubble-close").bind("click",remove_injected_node);
+}
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    inject_tdict();
+
     if (request.status == "begin") {
-      if (injected != null){
-        injected.remove();
-      }
-      var sel = window.getSelection();
-      console.log(""+sel);
-      //@todo: show a spin...
+      debugger;
+
+      var opts = {
+        lines: 7, // The number of lines to draw
+        length: 10, // The length of each line
+        width: 10, // The line thickness
+        radius: 15, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 0, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#000', // #rgb or #rrggbb or array of colors
+        speed: 1, // Rounds per second
+        trail: 60, // Afterglow percentage
+        shadow: false, // Whether to render a shadow
+        hwaccel: false, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: '50%', // Top position relative to parent
+        left: '50%' // Left position relative to parent
+      };
+
+      var target =  document.getElementById('tdict-replacement');
+
+      var title = document.createElement('h2');
+      title.appendChild(document.createTextNode('Looking up "' + request.userData + '"...'));
+      target.appendChild(title);
+
+      var spinner = document.createElement('div');
+      spinner.appendChild(new Spinner(opts).spin().el);
+      target.appendChild(spinner);
     }
     else if (request.status == "ok") {
       debugger;
-      injected = document.createElement('div');
-      injected.id="tdict-root";
 
-      var css = document.createElement('style');
-      css.type= "text/css";
-      css.appendChild(document.createTextNode(generate_css()));
-      injected.appendChild(css);
+      var target =  document.getElementById('tdict-replacement');
 
-      var main = document.createElement('div');
-      main.id = "tdict-bubble-main";
-      //TODO: calculate position based on current selection.
-      main.setAttribute("style", "left: 748px; top: 54.5625px;");
-
-      var close = document.createElement('div');
-      close.id="tdict-bubble-close";
-      // @todo: close injected window when clicked "X"..
-      main.appendChild(close);
-
-      var meaning = document.createElement('div');
-      meaning.id = "tdict-bubble-meaning";
+      // clear all children..
+      while (target.firstChild) {
+        target.removeChild(target.firstChild);
+      }
 
       // @todo: parse and find proper node. this should be a part of backend.
       //
       ele = $(request.userData).find("#phrsListTab")[0]
-      meaning.appendChild(// document.createTextNode(request.userData)
-        ele);
-
-      main.appendChild(meaning);
-      injected.appendChild(main);
-
-      document.body.parentNode.appendChild(injected);
+      target.appendChild(ele);
       $(".img-list").remove();
-      $("#tdict-bubble-close").bind("click",remove_injected_node);
     }
     else if (request.status == "error") {
       document.body.style.backgroundColor="red";
