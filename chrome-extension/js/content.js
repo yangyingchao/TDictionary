@@ -39,7 +39,14 @@ function generate_css ()
     '    width:500px'+
     '}' +
     '#tdict-bubble-main h2{' +
-    'font-size: 1.5em' +
+    'font-size: 1.5em;' +
+    '}'+
+    '#tdict-bubble-main h2 span {' +
+    'background-image: url("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gscDAsIbcqmVAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAABfElEQVQ4y+2UsWoqQRSGv1l0Fqy0WGQFsVCxsBV8BV/BytIn8AksfYItbbTwBUQsLBIbO8FKG7UyYrNJ4Y7guU3uknuzZmNIuvwwxTk/Z/45558ZRIS4tVgspNvtShQ3nU5lMBjIrVqLGByPR+n3++z3+0jedV3m8zn+sy9R/IcCQRCI53kYY/7Jdzod2Ww2AlAsFjHG8PjwyN0Co9Eo8uTlcpnxeAyAbdsqm82yWq0i90j8n2i32xI3Ntd1mUwmYay1Zrvdcr1exbIs9ekObiGVSmGMYbfbCUA6ncYYw+l0um9Et2DbNkDojdYagMvl8j0CQRCEnbwVSiaT3yPw8vKM1ppcLqcAzuczWmsymUy8yZ7nhSYNh0OZzWbvig6HJyqVypv4QKFQIJFIqLs6aDabKp/Pv8uv12sajUYY+75PtVq9/x28XtvQxL/o9XqqVCopgOVyKVprarXa1wQcx1GtVouoTl6/Eur1Oo7jqCheiQg/CYsfxq9ALP4AJHvEvyT/PeEAAAAASUVORK5CYII=");'+
+    'background-repeat: no-repeat;'+
+    'padding: .4em 30px .4em 0;'+
+    'background-position: right;' +
+    'display: inline ' +
     '}'+
     '#tdict-bubble-main:after{'+
     '    clear:both;'+
@@ -154,23 +161,19 @@ function generate_css ()
     '}' +
     '.pronounce {'+
     'font-size: 75%; color: #666;font-weight: lighter'+
-    '}'+
-    '.sp {'+
-    'padding-right: 30px;'+
-    'background: url("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gscDAsIbcqmVAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAABfElEQVQ4y+2UsWoqQRSGv1l0Fqy0WGQFsVCxsBV8BV/BytIn8AksfYItbbTwBUQsLBIbO8FKG7UyYrNJ4Y7guU3uknuzZmNIuvwwxTk/Z/45558ZRIS4tVgspNvtShQ3nU5lMBjIrVqLGByPR+n3++z3+0jedV3m8zn+sy9R/IcCQRCI53kYY/7Jdzod2Ww2AlAsFjHG8PjwyN0Co9Eo8uTlcpnxeAyAbdsqm82yWq0i90j8n2i32xI3Ntd1mUwmYay1Zrvdcr1exbIs9ekObiGVSmGMYbfbCUA6ncYYw+l0um9Et2DbNkDojdYagMvl8j0CQRCEnbwVSiaT3yPw8vKM1ppcLqcAzuczWmsymUy8yZ7nhSYNh0OZzWbvig6HJyqVypv4QKFQIJFIqLs6aDabKp/Pv8uv12sajUYY+75PtVq9/x28XtvQxL/o9XqqVCopgOVyKVprarXa1wQcx1GtVouoTl6/Eur1Oo7jqCheiQg/CYsfxq9ALP4AJHvEvyT/PeEAAAAASUVORK5CYII=") no-repeat'+
     '}';
-
   return css;
 }
 
 var injected = null;
+var key = null;
 
 function remove_injected_node ()
 {
   if (injected){
     injected.remove();
   }
-
+  key = null;
 }
 
 function inject_tdict ()
@@ -217,8 +220,6 @@ chrome.runtime.onMessage.addListener(
     inject_tdict();
 
     if (request.status == "begin") {
-      debugger;
-
       var opts = {
         lines: 7, // The number of lines to draw
         length: 10, // The length of each line
@@ -239,9 +240,9 @@ chrome.runtime.onMessage.addListener(
       };
 
       var target =  document.getElementById('tdict-replacement');
-
+      key = request.userData;
       var title = document.createElement('h2');
-      title.appendChild(document.createTextNode('Looking up "' + request.userData + '"...'));
+      title.appendChild(document.createTextNode('Looking up "' + key + '"...'));
       target.appendChild(title);
 
       var spinner = document.createElement('div');
@@ -249,8 +250,6 @@ chrome.runtime.onMessage.addListener(
       target.appendChild(spinner);
     }
     else if (request.status == "ok") {
-      debugger;
-
       var target =  document.getElementById('tdict-replacement');
 
       // clear all children..
@@ -258,11 +257,25 @@ chrome.runtime.onMessage.addListener(
         target.removeChild(target.firstChild);
       }
 
+      var title = document.createElement('h2');
+      title.appendChild(document.createTextNode(key));
+      var a = document.createElement('a');
+      // a.setAttribute('href', '#');
+      a.appendChild(document.createElement('span'));
+      title.appendChild(a);
+
+      target.appendChild(title);
+      target.appendChild(document.createElement('hr'));
       // @todo: parse and find proper node. this should be a part of backend.
       //
-      ele = $(request.userData).find("#phrsListTab")[0]
+      ele = $(request.userData).find(".trans-container")[0]
       target.appendChild(ele);
       $(".img-list").remove();
+      $("#tdict-replacement span").bind("click",function(){
+        chrome.runtime.sendMessage({cmd: "speak",
+                                    userData: key});
+        //@todo: add a progress bar for tts, and remove it after "speak" finished.
+      });
     }
     else if (request.status == "error") {
       document.body.style.backgroundColor="red";

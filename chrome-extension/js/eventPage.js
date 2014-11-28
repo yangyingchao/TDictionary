@@ -26,6 +26,7 @@ var youdaoDictionary = {
     req.open("GET", this.baseUrl + key + this.suffix, true);
     req.onload = this.getDefinations.bind(this);
     notifyStatus("begin", key);
+    // chrome.tts.speak("Searching...");
     req.send(null);
   },
 
@@ -46,13 +47,17 @@ var youdaoDictionary = {
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    debugger;
-    alert("AAA");
+    if (request.cmd == "speak"){
+      if (request.userData){
+        chrome.tts.speak(request.userData);
+      }
+      else {
+        alert("Nothing to speak...");
+      }
+    }
     console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
                 "from the extension");
-    if (request.greeting == "hello")
-      sendResponse({farewell: "goodbye"});
   });
 
 
