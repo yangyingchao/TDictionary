@@ -48,6 +48,13 @@ function generate_css ()
     'background-position: right;' +
     'display: inline ' +
     '}'+
+    '#tdict-bubble-main h2 span:hover {' +
+    'background-image: url("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABEAAAAUCAYAAABroNZJAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gsdADEuK8hj0QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAA6klEQVQ4y2P8//8/A6WAiYEKgPaGHLz253/xUgaC/mXBJXHr+d//0/awMPz+S6ZLPn379797KzOGAfHTGf5fefLvP1GGtG1iYnj7GVNcV+4Pw4bTTLi9E9RP2O9yggwMa89QGDu8XIwMv/8yMNx7jeolkgxhZYbo/faTApf8/svIwMDAwMDP8Z98Q959+cfAyszAICvCzIg1YNcVMsAlalcz/L/6BNOQ5x8ZGQwUiAzYUu9/DMK8mOKXH7Ew+Br9wxBnxJWL773+979yORPD77+oriQp7yiJMjFmufxhUBQjHFaMI6g8IRYAADteUVe23LMjAAAAAElFTkSuQmCC");'+
+    'background-repeat: no-repeat;'+
+    'padding: .4em 30px .4em 0;'+
+    'background-position: right;' +
+    'display: inline ' +
+    '}'+
     '#tdict-bubble-main:after{'+
     '    clear:both;'+
     '    content:"";'+
@@ -261,7 +268,11 @@ chrome.runtime.onMessage.addListener(
       title.appendChild(document.createTextNode(key));
       var a = document.createElement('a');
       // a.setAttribute('href', '#');
-      a.appendChild(document.createElement('span'));
+      var span = document.createElement('span');
+      // span.addEventListener("mouseover", function( event ) {
+      //   alert("A");
+      // });
+      a.appendChild(span);
       title.appendChild(a);
 
       target.appendChild(title);

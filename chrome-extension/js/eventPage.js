@@ -49,7 +49,8 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.cmd == "speak"){
       if (request.userData){
-        chrome.tts.speak(request.userData);
+        chrome.tts.speak(request.userData,
+                        {rate:0.8});
       }
       else {
         alert("Nothing to speak...");
