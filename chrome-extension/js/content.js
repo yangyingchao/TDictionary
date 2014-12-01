@@ -37,6 +37,12 @@ function generate_css ()
     '    padding:9px;'+
     '    position:fixed'+
     '}' +
+    '#tdict-bubble-main ol, ul, li{' +
+    'line-height: 1.2;' +
+    'list-style: none;'+
+    'margin: 0;' +
+    'padding: 0' +
+    '}'+
     '#tdict-bubble-main h2{' +
 	'margin-bottom: .25em;' +
 	'margin-top: .25em;' +
@@ -248,7 +254,6 @@ function inject_tdict ()
   injected.appendChild(main);
 
   document.body.parentNode.appendChild(injected);
-  $(".img-list").remove();
   $("#tdict-bubble-close").bind("click",remove_injected_node);
 }
 
@@ -258,7 +263,7 @@ chrome.runtime.onMessage.addListener(
 
     if (request.status == "begin") {
       var opts = {
-        lines: 7, // The number of lines to draw
+        lines: 6, // The number of lines to draw
         length: 10, // The length of each line
         width: 10, // The line thickness
         radius: 15, // The radius of the inner circle
