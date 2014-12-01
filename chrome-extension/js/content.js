@@ -35,11 +35,15 @@ function generate_css ()
     '    font-size:14px;'+
     '    line-height:normal;'+
     '    padding:9px;'+
-    '    position:fixed;'+
-    '    width:500px'+
+    '    position:fixed'+
     '}' +
     '#tdict-bubble-main h2{' +
+	'margin-bottom: .25em;' +
+	'margin-top: .25em;' +
+	'border-bottom: 1px solid lightgrey;' +
+    'text-shadow: 2px 2px 2px gray;' +
     'font-size: 1.5em;' +
+    'padding-bottom: .5em'+
     '}'+
     '#tdict-bubble-main h2 span {' +
     'background-image: url("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gscDAsIbcqmVAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAABfElEQVQ4y+2UsWoqQRSGv1l0Fqy0WGQFsVCxsBV8BV/BytIn8AksfYItbbTwBUQsLBIbO8FKG7UyYrNJ4Y7guU3uknuzZmNIuvwwxTk/Z/45558ZRIS4tVgspNvtShQ3nU5lMBjIrVqLGByPR+n3++z3+0jedV3m8zn+sy9R/IcCQRCI53kYY/7Jdzod2Ww2AlAsFjHG8PjwyN0Co9Eo8uTlcpnxeAyAbdsqm82yWq0i90j8n2i32xI3Ntd1mUwmYay1Zrvdcr1exbIs9ekObiGVSmGMYbfbCUA6ncYYw+l0um9Et2DbNkDojdYagMvl8j0CQRCEnbwVSiaT3yPw8vKM1ppcLqcAzuczWmsymUy8yZ7nhSYNh0OZzWbvig6HJyqVypv4QKFQIJFIqLs6aDabKp/Pv8uv12sajUYY+75PtVq9/x28XtvQxL/o9XqqVCopgOVyKVprarXa1wQcx1GtVouoTl6/Eur1Oo7jqCheiQg/CYsfxq9ALP4AJHvEvyT/PeEAAAAASUVORK5CYII=");'+
@@ -172,6 +176,32 @@ function generate_css ()
   return css;
 }
 
+function createTbody (element, source, sourceUrl)
+{
+  var tbody = document.createElement('tbody');
+  var tr = document.createElement('tr');
+  var td = document.createElement('td');
+  td.appendChild(element);
+  tr.appendChild(td);
+  tbody.appendChild(tr);
+
+  tr = document.createElement('tr');
+  td = document.createElement('td');
+
+  var copyright=document.createElement('div');
+  copyright.id = 'copyright';
+  var ac = document.createElement('a');
+  ac.setAttribute('href', sourceUrl);
+  ac.appendChild(document.createTextNode(source));
+  copyright.appendChild(ac);
+
+  td.appendChild(copyright);
+  tr.appendChild(td);
+  tbody.appendChild(tr);
+
+  return tbody;
+}
+
 var injected = null;
 var key = null;
 
@@ -264,35 +294,27 @@ chrome.runtime.onMessage.addListener(
         target.removeChild(target.firstChild);
       }
 
+      var tbl = document.createElement('table');
+      var tr = document.createElement('tr');
+      var td = document.createElement('td');
       var title = document.createElement('h2');
       title.appendChild(document.createTextNode(key));
       var a = document.createElement('a');
-      // a.setAttribute('href', '#');
       var span = document.createElement('span');
-      // span.addEventListener("mouseover", function( event ) {
-      //   alert("A");
-      // });
       a.appendChild(span);
       title.appendChild(a);
+      td.appendChild(title);
+      tr.appendChild(td);
+      tbl.appendChild(tr);
 
-      target.appendChild(title);
-      target.appendChild(document.createElement('hr'));
       // @todo: parse and find proper node. this should be a part of backend.
       //
-      ele = $(request.userData).find(".trans-container")[0]
-      target.appendChild(ele);
+      ele = $(request.userData).find(".trans-container")[0];
+      var tbody = createTbody(ele, "有道词典", "http://www.youdao.com/");
+      tbl.appendChild(tbody);
+      target.appendChild(tbl);
+
       $(".img-list").remove();
-
-      target.appendChild(document.createElement('br'));
-
-      var copyright=document.createElement('div');
-      copyright.id = 'copyright';
-      var ac = document.createElement('a');
-      ac.setAttribute('href', "http://www.youdao.com/");
-      ac.appendChild(document.createTextNode("有道词典"));
-      copyright.appendChild(ac);
-      target.appendChild(copyright);
-
       $("#tdict-replacement span").bind("click",function(){
         chrome.runtime.sendMessage({cmd: "speak",
                                     userData: key});
