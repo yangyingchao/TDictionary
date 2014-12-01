@@ -37,6 +37,12 @@ function generate_css ()
     '    padding:9px;'+
     '    position:fixed'+
     '}' +
+    '#tdict-bubble-main td{'+
+    'border: none' +
+    '}' +
+    '#tdict-bubble-main table{'+
+    'background-color: rgba(0,0,0,0)'+
+    '}' +
     '#tdict-bubble-main ol, ul, li{' +
     'line-height: 1.2;' +
     'list-style: none;'+
