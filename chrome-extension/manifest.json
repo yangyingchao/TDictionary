@@ -13,7 +13,7 @@
 
   "background" : {
     "persistent" : false,
-    "scripts" : ["js/eventPage.js"]
+    "scripts" : ["js/jquery.min.js", "js/eventPage.js"]
   },
 
   "permissions":  [

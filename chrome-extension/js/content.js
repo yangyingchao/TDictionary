@@ -54,6 +54,7 @@ function generate_css ()
 	'margin-top: .25em;' +
 	'border-bottom: 1px solid lightgrey;' +
     'text-shadow: 2px 2px 2px gray;' +
+    'background-color: rgba(0,0,0,0);'+
     'font-size: 1.5em;' +
     'padding-bottom: .5em'+
     '}'+
@@ -62,6 +63,7 @@ function generate_css ()
     'background-repeat: no-repeat;'+
     'padding: .4em 30px .4em 0;'+
     'background-position: right;' +
+    'background-color: rgba(0,0,0,0);'+
     'display: inline ' +
     '}'+
     '#tdict-bubble-main h2 span:hover {' +
@@ -188,12 +190,12 @@ function generate_css ()
   return css;
 }
 
-function createTbody (element, source, sourceUrl)
+function createTbody (eleHtml, source, sourceUrl)
 {
   var tbody = document.createElement('tbody');
   var tr = document.createElement('tr');
   var td = document.createElement('td');
-  td.appendChild(element);
+  td.appendChild($(eleHtml)[0]);
   tr.appendChild(td);
   tbody.appendChild(tr);
 
@@ -320,8 +322,13 @@ chrome.runtime.onMessage.addListener(
 
       // @todo: parse and find proper node. this should be a part of backend.
       //
-      ele = $(request.userData).find(".trans-container")[0];
-      var tbody = createTbody(ele, "有道词典", "http://www.youdao.com/");
+      var def = request.userData;
+      var ele = def.definition;
+      if (ele == null){
+        ele = def.raw_content;
+      }
+
+      var tbody = createTbody(ele, def.name, def.url);
       tbl.appendChild(tbody);
       target.appendChild(tbl);
 

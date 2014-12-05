@@ -2,10 +2,15 @@
 {
   chrome.tabs.query({active: true, currentWindow: true},
                     function(tabs){
-                      chrome.tabs.sendMessage(tabs[0].id,
-                                              {status: statusCode,
-                                              userData: data},
-                                              function(response) {});
+                      if (tabs.length > 0) {
+                        chrome.tabs.sendMessage(tabs[0].id,
+                                                {status: statusCode,
+                                                 userData: data},
+                                                function(response) {});
+                      }
+                      else {
+                        alert("did not find active tab!");
+                      }
                     });
 }
 
@@ -15,15 +20,27 @@
 //   }
 // });
 
+var Definition = {
+  createNew: function(name, url, def, raw_content) {
+    var instance = {};
+    instance.name = name; // source name
+    instance.url = url;   // source url
+    instance.definition = def; // array of definitions.
+    instance.raw_content = raw_content;
+    return instance;
+  }
+};
+
 // Youdao dictionary
 var youdaoDictionary = {
   baseUrl : "http://dict.youdao.com/search?q=",
   suffix : "&keyfrom=dict.typo&spc=dictionary&le=eng",
-
+  url:null,
   // TODO: provide a callback to notify when definition is available
   lookup : function(key) {
     var req = new XMLHttpRequest();
-    req.open("GET", this.baseUrl + key + this.suffix, true);
+    url = this.baseUrl + key + this.suffix;
+    req.open("GET", url, true);
     req.onload = this.getDefinations.bind(this);
     notifyStatus("begin", key);
     // chrome.tts.speak("Searching...");
@@ -40,7 +57,10 @@ var youdaoDictionary = {
    * @private
    */
   getDefinations : function (e) {
-    notifyStatus("ok", e.target.response);
+    notifyStatus("ok",
+                 Definition.createNew("有道词典", url,
+                                      $(e.target.response).find(".trans-container")[0].innerHTML,
+                                      e.target.response));
   }
 };
 
