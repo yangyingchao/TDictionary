@@ -22,7 +22,8 @@ function generate_css ()
     '    line-height:normal;'+
     '    padding:9px;'+
     '    position:fixed;'+
-    '    box-sizing:border-box'+
+    '    box-sizing:border-box;'+
+    '   width:22em' +
     '}' +
     '#tdict-bubble-main a{'+
     '    color:#11c;'+
@@ -144,7 +145,7 @@ function generate_css ()
     '    overflow:hidden;'+
     '    text-overflow:ellipsis;'+
     '    white-space:nowrap;'+
-    '    width:230px'+
+    '    width:120px'+
     '}'+
     '#tdict-bubble-attribution a{'+
     '    color:#073'+
