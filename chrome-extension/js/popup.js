@@ -10,8 +10,11 @@ var dailySentence = {
   },
 
   showSentence: function (e) {
-    document.writeln("Hello World!");
-    document.writeln("Have a nice day!");
+    var h = document.createElement("H1") // Create a <h1> element
+    var t = document.createTextNode("Notice!"); // Create a text node
+    h.appendChild(t)
+    document.body.appendChild(h)
+
     document.body.appendChild(document.createTextNode("icba"));
     var copyright=document.createElement('div');
     copyright.id = 'copyright';
@@ -21,7 +24,6 @@ var dailySentence = {
     copyright.appendChild(ac);
     document.body.appendChild(copyright);
 
-    debugger;
     var node = $(e.target.response).find("#pic_fr")[0];
     console.log(node);
     if (node != null){
