@@ -38,7 +38,7 @@ function generate_css ()
     '#tdict-bubble-main table{'+
     'background-color: rgba(0,0,0,0)'+
     '}' +
-    '#tdict-bubble-main ol, ul, li{' +
+    '#tdict-bubble-main ol ul li{' +
     'line-height: 1.2;' +
     'list-style: none;'+
     'margin: 0;' +

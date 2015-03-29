@@ -5,5 +5,5 @@
 
 for sz in 16 32 48 64 96 128; do
     echo "Converting "icon_"$sz".png
-    convert -resize "$sz"x"$sz" $1 icon_"$sz".png
+    convert -background none  -resize "$sz"x"$sz" icon.svg icon_"$sz".png
 done
